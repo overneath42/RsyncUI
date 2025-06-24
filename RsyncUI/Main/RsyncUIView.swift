@@ -40,7 +40,6 @@ struct RsyncUIView: View {
                                 errorhandling: errorhandling)
             }
         }
-        .padding()
         .task {
             ReadUserConfigurationJSON().readuserconfiguration()
             // Get version of rsync

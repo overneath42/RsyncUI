@@ -36,7 +36,6 @@ struct RsyncParametersView: View {
                         .buttonStyle(ColorfulButtonStyle())
                         .help("Update parameters")
                         .disabled(selectedconfig == nil)
-                        .padding(.bottom, 10)
 
                     } else {
                         Button("Add") {
@@ -45,7 +44,6 @@ struct RsyncParametersView: View {
                         .buttonStyle(ColorfulButtonStyle())
                         .help("Save parameters")
                         .disabled(selectedconfig == nil)
-                        .padding(.bottom, 10)
                     }
 
                     Section(header: Text("Task spesific parameters for rsync")) {

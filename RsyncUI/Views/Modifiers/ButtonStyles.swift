@@ -8,18 +8,19 @@
 import SwiftUI
 
 extension Color {
+    static let baseRed = Color(red: 226 / 255, green: 87 / 255, blue: 66 / 255)
+    
     static let darkStart = Color(red: 50 / 255, green: 60 / 255, blue: 65 / 255)
     static let darkEnd = Color(red: 25 / 255, green: 25 / 255, blue: 30 / 255)
 
     static let lightStart = Color(red: 60 / 255, green: 160 / 255, blue: 240 / 255)
     static let lightEnd = Color(red: 30 / 255, green: 80 / 255, blue: 120 / 255)
-    /*
-        static let darkredStart = Color(red: 200 / 255, green: 0 / 255, blue: 0 / 255)
-        static let darkredEnd = Color(red: 150 / 255, green: 0 / 255, blue: 0 / 255)
 
-        static let lightredStart = Color(red: 100 / 255, green: 0 / 255, blue: 0 / 255)
-        static let lightredEnd = Color(red: 50 / 255, green: 0 / 255, blue: 0 / 255)
-     */
+    static let darkredStart = Color(red: 200 / 255, green: 0 / 255, blue: 0 / 255)
+    static let darkredEnd = Color(red: 150 / 255, green: 0 / 255, blue: 0 / 255)
+
+    static let lightredStart = baseRed
+    static let lightredEnd = Color(red: 206 / 255, green: 79 / 255, blue: 61 / 255)
 }
 
 extension LinearGradient {
@@ -34,19 +35,13 @@ struct ColorfulBackground<S: Shape>: View {
 
     var body: some View {
         ZStack {
-            if isHighlighted {
-                shape
-                    .fill(LinearGradient(Color.lightEnd, Color.lightStart))
-                    .overlay(shape.stroke(LinearGradient(Color.lightStart, Color.lightEnd), lineWidth: 2))
-                    .shadow(color: Color.darkStart, radius: 2, x: 1, y: 1)
-                    .shadow(color: Color.darkEnd, radius: 2, x: -1, y: -1)
-            } else {
-                shape
-                    .fill(LinearGradient(Color.darkStart, Color.darkEnd))
-                    .overlay(shape.stroke(LinearGradient(Color.lightStart, Color.lightEnd), lineWidth: 2))
-                    .shadow(color: Color.darkStart, radius: 2, x: -1, y: -1)
-                    .shadow(color: Color.darkEnd, radius: 2, x: 1, y: 1)
-            }
+            shape
+                .fill(LinearGradient(
+                    isHighlighted ? Color.darkredStart : Color.lightredStart,
+                    isHighlighted ? Color.darkredEnd : Color.lightredEnd
+                ))
+                .shadow(
+                    color: isHighlighted ? Color.darkStart : Color.darkredStart, radius: 2, x: 1, y: 1)
         }
     }
 }
@@ -55,10 +50,18 @@ struct ColorfulButtonStyle: ButtonStyle {
     func makeBody(configuration: Configuration) -> some View {
         configuration.label
             .foregroundColor(.white)
-            .padding(8)
-            .contentShape(Capsule())
+            .padding(EdgeInsets(
+                top: StyleConstants.paddingSmall,
+                leading: StyleConstants.paddingBase,
+                bottom: StyleConstants.paddingSmall,
+                trailing: StyleConstants.paddingBase)
+            )
+            .cornerRadius(StyleConstants.cornerRadiusLarge)
+            .font(.system(size: 16, weight: .bold))
             .background(
-                ColorfulBackground(isHighlighted: configuration.isPressed, shape: Capsule())
+                ColorfulBackground(
+                    isHighlighted: configuration.isPressed,
+                    shape: Rectangle())
             )
     }
 }
